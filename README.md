@@ -1,7 +1,6 @@
 # Django for APIs Cookbook with a Blog API Example
 
-
-![License](https://img.shields.io/github/license/username/django-rest-blog-api.svg)
+![License](https://img.shields.io/github/license/vancun/django-for-apis-cookbook-with-blog.svg)
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 
 ## Description
