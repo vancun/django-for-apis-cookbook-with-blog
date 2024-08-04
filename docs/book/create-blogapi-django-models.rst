@@ -123,15 +123,32 @@ To learn more about E-R diagrams with Mermaid, go to Mermaid documentation on `E
 
 Here is the diagram I came with:
 
-.. mermaid::
+PlantUML Variant:
 
-    ---
-    title: Blog API Model
-    ---
-    erDiagram
-        Post ||--o{ Comment : "has"
-        Post }o--|| User : "created by"
-        Post }o--o{ Tag : has
+Instead of Mermaid, you could try using plant uml through the `PlantUML extension <https://github.com/sphinx-contrib/plantuml>`_.
+
+.. uml::
+
+   Post ||--o{ Comment
+   Post }o--|| User
+   Post }o--o{ Tag
+
+Mermaid Variant:
+
+.. image:: images/blog-api-model-e-r-diagram.png
+   :alt: Blog API E-R Diagram
+   :align: center
+
+
+.. .. mermaid::
+
+..     ---
+..     title: Blog API Model
+..     ---
+..     erDiagram
+..         Post ||--o{ Comment : "has"
+..         Post }o--|| User : "created by"
+..         Post }o--o{ Tag : has
 
 
 
