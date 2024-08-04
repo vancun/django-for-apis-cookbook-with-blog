@@ -102,6 +102,19 @@ In order to be able to generate Mermaid diagrams in PDF files, you need to updat
           post_install:
             - npm install -g @mermaid-js/mermaid-cli
 
+In your documentation directory add file puppeteer-config.json with contents:
+
+.. code-block:: json
+    
+    {
+        "args": ["--no-sandbox"]
+    }
+
+In your documentation :file:`docs/conf.py` file, add:
+
+.. code-block:: python
+
+    mermaid_params = ['-p' 'puppeteer-config.json'
 
 Create E-R diagram for our Blog API
 ++++++++++++++++++++++++++++++++++++++++++++
