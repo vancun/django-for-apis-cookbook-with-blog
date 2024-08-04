@@ -359,9 +359,9 @@ Add the tests for the ``Tag`` model to :file:`src/tests/posts/test_models.py`:
             assert 0 == len(post_with_tag.tags.all())
 
         @pytest.mark.django_db
-        def test_should_not_delete_tag_when_post_is_deleted(self, post: Post, tag: Tag):
+        def test_should_not_delete_tag_when_post_is_deleted(self, post_with_tag: Post, tag: Tag):
             # WHEN post is deleted
-            post.delete()
+            post_with_tag.delete()
             # THEN the tag is still in the database
             tag.refresh_from_db()
             # AND post link to tag is deleted
