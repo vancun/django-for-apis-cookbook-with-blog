@@ -18,6 +18,7 @@ build:
   jobs:
     post_install:
       - npm install -g @mermaid-js/mermaid-cli
+      - sudo apt-get install chromium-browser
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
