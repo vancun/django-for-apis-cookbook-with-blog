@@ -5,5 +5,7 @@ Django for APIs Cookbook
    :maxdepth: 2
 
    /book/setup-python-project
+   /book/setup-django-project.rst
+   
 
 
