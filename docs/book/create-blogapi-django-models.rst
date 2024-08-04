@@ -79,11 +79,29 @@ Open a Sphinx document and add following content:
             John->Bob: How about you?
             Bob-->John: Jolly good!
 
-Afte building the project documentation, you should be able to see:
+After building the project documentation, you should be able to see:
 
 .. image:: images/sample-mermaid-sequence-diagram.png
    :alt: Sample Mermaid sequence diagram
    :align: center
+
+Configure ReadTheDocs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to be able to generate Mermaid diagrams in PDF files, you need to update the :file:`.readthedocs.yaml`:
+
+.. code-block:: yaml
+
+    build:
+      os: ubuntu-22.04
+      tools:
+          python: "3.12"
+          nodejs: "19"
+
+      jobs:
+          post_install:
+            - npm install -g @mermaid-js/mermaid-cli
+
 
 Create E-R diagram for our Blog API
 ++++++++++++++++++++++++++++++++++++++++++++
