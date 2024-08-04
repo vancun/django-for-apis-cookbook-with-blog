@@ -5,7 +5,9 @@ Django for APIs Cookbook
    :maxdepth: 2
 
    /book/setup-python-project
-   /book/setup-django-project.rst
+   /book/setup-django-project
+   /book/custom-django-user-model
+   /book/create-blogapi-django-models
    
 
 

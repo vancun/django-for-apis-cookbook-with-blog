@@ -16,6 +16,7 @@ release = "0.1"
 
 extensions = [
     "recommonmark",
+    "sphinxcontrib.mermaid",
 ]
 
 templates_path = ["_templates"]
