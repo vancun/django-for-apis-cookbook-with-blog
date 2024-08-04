@@ -85,7 +85,7 @@ After building the project documentation, you should be able to see:
    :alt: Sample Mermaid sequence diagram
    :align: center
 
-Configure ReadTheDocs
+Configure ReadTheDocs for Mermaid
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to be able to generate Mermaid diagrams in PDF files, you need to update the :file:`.readthedocs.yaml`:
