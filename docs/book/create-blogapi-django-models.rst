@@ -130,8 +130,8 @@ Here is the diagram I came with:
    :align: center
 
 
-.. code-block::
-    
+.. code-block:: text
+
     .. mermaid::
 
         ---
