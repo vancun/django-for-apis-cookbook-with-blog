@@ -1,3 +1,4 @@
 {
-    "args": ["--no-sandbox"]
+    "headless": false,
+    "args": ["--no-sandbox", "--disabled-setupid-sandbox"]
 }
