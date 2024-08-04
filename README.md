@@ -7,6 +7,8 @@
 
 This project is a blog API built with Django Rest Framework. It serves as a training tool, providing step-by-step recipes for implementing various activities typically involved in creating an API with Django Rest Framework. Each recipe has at least one corresponding GitHub branch to help you with understanding and implementing the recipe.
 
+The book content is also available at ReadTheDocs as [django-for-apis-cookbook-with-a-blog-api-example](https://django-for-apis-cookbook-with-a-blog-api-example.readthedocs.io/en/latest/).
+
 ## Table of Contents
 
 - [Installation](#installation)
