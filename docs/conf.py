@@ -33,4 +33,4 @@ source_suffix = {
 
 html_theme = "alabaster"
 html_static_path = ["_static"]
-mermaid_params = ['-p' 'puppeteer-config.json']
+mermaid_params = ['-p', 'puppeteer-config.json']

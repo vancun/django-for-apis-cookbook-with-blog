@@ -114,7 +114,7 @@ In your documentation :file:`docs/conf.py` file, add:
 
 .. code-block:: python
 
-    mermaid_params = ['-p' 'puppeteer-config.json'
+    mermaid_params = ['-p', 'puppeteer-config.json']
 
 Create E-R diagram for our Blog API
 ++++++++++++++++++++++++++++++++++++++++++++
