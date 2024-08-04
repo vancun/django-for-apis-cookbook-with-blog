@@ -2,4 +2,3 @@ recommonmark
 sphinx
 sphinx-autobuild
 sphinxcontrib-mermaid
-sphinxcontrib-plantuml
