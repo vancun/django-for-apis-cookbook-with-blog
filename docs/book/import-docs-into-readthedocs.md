@@ -1,0 +1,59 @@
+# Import Docs Into ReadTheDocs
+
+## Prepare your project for ReadTheDocs
+
+Create `.readthedocs.yaml` in the application root:
+
+```yaml
+# .readthedocs.yaml
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+    # You can also specify other tool versions:
+    # nodejs: "19"
+    # rust: "1.64"
+    # golang: "1.19"
+
+# Build documentation in the "docs/" directory with Sphinx
+sphinx:
+  configuration: docs/conf.py
+
+# Optionally build your docs in additional formats such as PDF and ePub
+formats:
+   - pdf
+   - epub
+
+# Optional but recommended, declare the Python requirements required
+# to build your documentation
+# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+python:
+   install:
+   - requirements: docs/requirements.txt   
+```
+
+Move the content of the `requirements.txt` file, related to documentation into `docs/requirements.txt`:
+
+```
+recommonmark
+sphinx
+sphinx-autobuild
+```
+
+Update your `requirements.txt` so that it includes the `docs/requirements.txt`:
+
+```
+-r docs/requirements.txt
+```
+
+## Import your project into ReadTheDocs
+
+Login into [ReadTheDocs](https://about.readthedocs.com/) and follow the instructions to import a new project.
+
