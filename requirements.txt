@@ -1,1 +1,7 @@
--r docs/requirements.txt
+# -r docs/requirements.txt
+django
+djangorestframework
+pytest
+pytest-cov
+pytest-django
+python-dotenv
