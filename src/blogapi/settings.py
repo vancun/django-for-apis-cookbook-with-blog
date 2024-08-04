@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     # 3rd Party
     "rest_framework",
     # Local
-    "accounts.apps.AccountsConfig",  # new
+    "accounts.apps.AccountsConfig",
+    "posts.apps.PostsConfig",
 ]
 
 MIDDLEWARE = [
