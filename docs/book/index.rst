@@ -9,6 +9,6 @@ Django for APIs Cookbook
    /book/custom-django-user-model
    /book/create-blogapi-django-models
    /book/future-topics
-   
+   /book/test-models-with-pytest
 
 
