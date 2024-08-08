@@ -214,6 +214,25 @@ First you need to install graphviz package. Update :file:`requirements.txt` and 
 
     pip install -U -r requirements.txt
 
+You need to add also ``django-fsm`` to ``INSTALLED_APPS``:
+
+.. code-block:: python
+
+    INSTALLED_APPS = [
+        "django.contrib.admin",
+        "django.contrib.auth",
+        "django.contrib.contenttypes",
+        "django.contrib.sessions",
+        "django.contrib.messages",
+        "django.contrib.staticfiles",
+        # 3rd Party
+        "rest_framework",
+        "django_fsm",     # new
+        # Local
+        "accounts.apps.AccountsConfig",
+        "posts.apps.PostsConfig",
+    ]
+
 You also need to install (depends on your operating system) graphviz executables (see `graphviz downloads <https://graphviz.org/download/>`_ for more information):
 
 .. code-block:: bash
