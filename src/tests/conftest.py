@@ -6,7 +6,12 @@ from posts.models import Comment, Post, Tag
 
 @pytest.fixture(name="user")
 def given_user():
-    u = CustomUser.objects.create()
+    u = CustomUser.objects.create(username="user")
+    return u
+
+@pytest.fixture(name="user2")
+def given_user2():
+    u = CustomUser.objects.create(username="user2")
     return u
 
 
