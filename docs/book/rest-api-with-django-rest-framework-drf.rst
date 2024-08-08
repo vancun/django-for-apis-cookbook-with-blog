@@ -370,6 +370,7 @@ Questions
 ++++++++++++++++++
 
 1. The API tests are missing some test cases. Can you spot which are they and implement them?
+2. Now we have some duplication in our tests. The url tests and the model tests are testing the same capabilities of the applicaiton. Do we need to maintain both?
 
 Further Reading
 +++++++++++++++++++++++
