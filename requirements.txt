@@ -1,5 +1,6 @@
 -r docs/requirements.txt
 django
+django-fsm-2
 djangorestframework
 pytest
 pytest-cov
