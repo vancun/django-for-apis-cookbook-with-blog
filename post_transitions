@@ -1,0 +1,17 @@
+digraph {
+	subgraph cluster_posts_Post_state {
+		graph [label="posts.Post.state"]
+		"posts.post.state.published" [label=published shape=circle]
+		"posts.post.state.draft" [label=draft shape=circle]
+		"posts.post.state._initial" [label="" shape=point]
+		"posts.post.state._initial" -> "posts.post.state.draft"
+		"posts.post.state.archived" [label=archived shape=circle]
+		"posts.post.state.draft" -> "posts.post.state.draft" [label=draft]
+		"posts.post.state.published" -> "posts.post.state.draft" [label=draft]
+		"posts.post.state.published" -> "posts.post.state.archived" [label=archive]
+		"posts.post.state.archived" -> "posts.post.state.archived" [label=archive]
+		"posts.post.state.draft" -> "posts.post.state.published" [label=publish]
+		"posts.post.state.draft" -> "posts.post.state.archived" [label=archive]
+		"posts.post.state.archived" -> "posts.post.state.draft" [label=draft]
+	}
+}
