@@ -84,3 +84,7 @@ Other Topics
   - https://realpython.com/directory-tree-generator-python/ also https://www.javatpoint.com/create-a-python-directory-tree-generator
   - https://stackoverflow.com/a/59109706/6949234
   - https://pypi.org/project/directory-tree/
+
+
+Pre-Commit Hooks
++++++++++++++++++++++++++++
