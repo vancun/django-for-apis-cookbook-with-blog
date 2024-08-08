@@ -262,7 +262,7 @@ Questions
 ++++++++++++++++
 
 - When you look at the statechart diagram, you might find that there are some state transitions that are not tested by our tests. Could you find them? Write tests for them?
-
+- Think how you could improve the tests?
 
 Further Reading
 ++++++++++++++++++++++

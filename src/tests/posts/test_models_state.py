@@ -1,6 +1,11 @@
 import pytest
+from django_fsm import (
+    TransitionNotAllowed,
+    get_available_FIELD_transitions,
+    get_available_user_FIELD_transitions,
+    has_transition_perm,
+)
 from posts.models import Post, PostState
-from django_fsm import has_transition_perm, TransitionNotAllowed
 
 pytestmark = [pytest.mark.django_db]
 
@@ -58,3 +63,35 @@ class TestPostState:
         post.state = PostState.PUBLISHED
         post.archive()
         assert post.state == PostState.ARCHIVED
+
+    # PARAMETRIZED
+
+    @pytest.mark.parametrize(
+        "state,expect_states,user_fixture",
+        (
+            (PostState.DRAFT, ["draft", "publish", "archive"], None),
+            (PostState.DRAFT, ["draft", "publish", "archive"], "user"),
+            (PostState.DRAFT, [], "user2"),
+            (PostState.PUBLISHED, ["draft", "archive"], None),
+            (PostState.PUBLISHED, ["draft", "archive"], "user"),
+            (PostState.PUBLISHED, [], "user2"),
+            (PostState.ARCHIVED, ["draft"], None),
+            (PostState.ARCHIVED, ["draft"], "user"),
+            (PostState.ARCHIVED, [], "user2"),
+        ),
+    )
+    def test_should_return_available_state_transitions(
+        self, post, request, state, expect_states, user_fixture
+    ):
+        post.state = state
+        state_field = Post._meta.get_field("state")
+        if user_fixture:
+            user = request.getfixturevalue(user_fixture)
+            available_state_names = [
+                t.name for t in get_available_user_FIELD_transitions(post, user, state_field)
+            ]
+        else:
+            available_state_names = [
+                t.name for t in get_available_FIELD_transitions(post, state_field)
+            ]
+        assert sorted(available_state_names) == sorted(expect_states)
