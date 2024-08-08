@@ -378,3 +378,5 @@ Further Reading
 2. `Django for APIs <https://djangoforapis.com/>`_ book
 3. `Good Code, Bad Code <https://learning.oreilly.com/library/view/good-code-bad/9781617298936/OEBPS/Text/P3.htm>`_ book - Part 3. Unit Testing
 4. `Python Testing with Pytest <https://learning.oreilly.com/library/view/python-testing-with/9781680509427/>`_, Second Edition
+5. `From Testing Pyramid to Diamond <https://steven-giesel.com/blogPost/86b6fae7-95a7-44fa-a85a-00ee1b6dd697>`_
+6. `Test Shapes <https://testerstories.com/2020/09/test-shapes/>`_
