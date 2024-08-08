@@ -44,7 +44,7 @@ class Post(models.Model):
         pass
 
     @transition(
-        field=state, source="*", target=PostState.ARCHIVED, permission=can_archive
+        field=state, source="+", target=PostState.ARCHIVED, permission=can_archive
     )
     def archive(self):
         pass

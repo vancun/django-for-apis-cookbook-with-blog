@@ -6,6 +6,7 @@ In this guide we are going to:
 - Install ``django-fsm-2`` package
 - Define the blog Post worflow using the ``transition`` decorator
 - Test the workflow using pytest
+- Generate statechart diagram
 
 Pre-requisites
 ++++++++++++++++++++
@@ -31,6 +32,12 @@ Only author can change the post state.
 Post could be archived from any state.
 Post can be published only from draft.
 Post can be made draft from any state.
+
+Here is what the state transitions look like. The diagram has been created using django-fsm package.
+
+.. image:: images/post_transitions.png
+   :alt: Statechart diagram created by django-fsm package
+   :align: center
 
 
 Install ``django-fsm``
@@ -185,6 +192,58 @@ To verify requirements are satisfied, write state machine tests:
             post.state = PostState.PUBLISHED
             post.archive()
             assert post.state == PostState.ARCHIVED
+
+Generate Statechart Diagram
++++++++++++++++++++++++++++++++
+
+First you need to install graphviz package. Update :file:`requirements.txt` and install the dependencies:
+
+.. code-block:: text
+
+    -r docs/requirements.txt
+    django
+    django-fsm-2
+    djangorestframework
+    graphviz
+    pytest
+    pytest-cov
+    pytest-django
+    python-dotenv
+
+.. code-block:: bash
+
+    pip install -U -r requirements.txt
+
+You also need to install (depends on your operating system) graphviz executables (see `graphviz downloads <https://graphviz.org/download/>`_ for more information):
+
+.. code-block:: bash
+
+    sudo apt install graphviz
+
+Generate the image:
+
+.. code-block:: bash
+
+    python src/manage.py graph_transitions -o post_transitions.png posts.Post
+
+If for some reason graphviz is not in the ``PATH``:
+
+.. code-block:: bash
+
+    PATH=$PATH:/path/to/graphviz/binary python src/manage.py graph_transitions -o post_transitions.png posts.Post
+
+Here is an example of the diagram generated after following this guide:
+
+.. image:: images/post_transitions.png
+   :alt: Statechart diagram created by django-fsm package
+   :align: center
+
+
+Questions
+++++++++++++++++
+
+- When you look at the statechart diagram, you might find that there are some state transitions that are not tested by our tests. Could you find them? Write tests for them?
+
 
 Further Reading
 ++++++++++++++++++++++
