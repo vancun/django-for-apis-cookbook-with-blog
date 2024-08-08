@@ -124,6 +124,13 @@ Let's define our workflow using the django-fsm ``transition`` decorator:
 We also defined permission checking methods and attached them to the state mutator methods, using the ``permission`` parameter
 of the ``transition`` decorator.
 
+After we modify the model, we should always migrate our database:
+
+.. code-block:: bash
+
+    python src/manage.py makemigrations
+    python src/manage.py migrate
+
 Test the State Machine
 +++++++++++++++++++++++++++++++++
 
@@ -133,8 +140,13 @@ To verify requirements are satisfied, write state machine tests:
 
     # /src/tests/posts/test_models_state.py
     import pytest
+    from django_fsm import (
+        TransitionNotAllowed,
+        get_available_FIELD_transitions,
+        get_available_user_FIELD_transitions,
+        has_transition_perm,
+    )
     from posts.models import Post, PostState
-    from django_fsm import has_transition_perm, TransitionNotAllowed
 
     pytestmark = [pytest.mark.django_db]
 
@@ -192,6 +204,38 @@ To verify requirements are satisfied, write state machine tests:
             post.state = PostState.PUBLISHED
             post.archive()
             assert post.state == PostState.ARCHIVED
+
+        # PARAMETRIZED
+
+        @pytest.mark.parametrize(
+            "state,expect_states,user_fixture",
+            (
+                (PostState.DRAFT, ["draft", "publish", "archive"], None),
+                (PostState.DRAFT, ["draft", "publish", "archive"], "user"),
+                (PostState.DRAFT, [], "user2"),
+                (PostState.PUBLISHED, ["draft", "archive"], None),
+                (PostState.PUBLISHED, ["draft", "archive"], "user"),
+                (PostState.PUBLISHED, [], "user2"),
+                (PostState.ARCHIVED, ["draft"], None),
+                (PostState.ARCHIVED, ["draft"], "user"),
+                (PostState.ARCHIVED, [], "user2"),
+            ),
+        )
+        def test_should_return_available_state_transitions(
+            self, post, request, state, expect_states, user_fixture
+        ):
+            post.state = state
+            state_field = Post._meta.get_field("state")
+            if user_fixture:
+                user = request.getfixturevalue(user_fixture)
+                available_state_names = [
+                    t.name for t in get_available_user_FIELD_transitions(post, user, state_field)
+                ]
+            else:
+                available_state_names = [
+                    t.name for t in get_available_FIELD_transitions(post, state_field)
+                ]
+            assert sorted(available_state_names) == sorted(expect_states)
 
 Generate Statechart Diagram
 +++++++++++++++++++++++++++++++
