@@ -88,6 +88,40 @@ src/tests/recipes/test_custom_parameterset_identifiers.py::test_addition_custom_
 As you can see the identifiers we provided in the `pytest.param` decorator are being used by `pytest`.
 
 
+## Provide custom identifiers with `ids` parameter
+
+You can spcify explicit identifiers for parametersets using the `ids` parameter of the `pytest.mark.parametrize` fixture:
+
+```python
+@pytest.mark.parametrize(
+    "input, expected", 
+    test_data,
+    ids = ("one_plus_one", "two_plus_two", "three_plus_three")
+)
+def test_addition_custom_ids_list(input, expected):
+    assert input + input == expected
+```
+
+Produces following result:
+
+```
+============================= test session starts ==============================
+platform linux -- Python 3.10.13, pytest-8.3.2, pluggy-1.5.0 -- /home/codespace/.python/current/bin/python3
+cachedir: .pytest_cache
+django: version: 5.1, settings: blogapi.settings (from ini)
+rootdir: /workspaces/django-for-apis-cookbook-with-blog
+configfile: pytest.ini
+plugins: anyio-4.4.0, cov-5.0.0, django-4.8.0
+collecting ... collected 3 items
+
+src/tests/recipes/test_custom_parameterset_identifiers.py::test_addition_custom_ids_list[one_plus_one] PASSED [ 33%]
+src/tests/recipes/test_custom_parameterset_identifiers.py::test_addition_custom_ids_list[two_plus_two] PASSED [ 66%]
+src/tests/recipes/test_custom_parameterset_identifiers.py::test_addition_custom_ids_list[three_plus_three] PASSED [100%]
+
+============================== 3 passed in 0.07s ===============================
+```
+
+
 ## Generate Dynamic Identifiers
 
 You might also want to generate identifiers dynamically based on the parameter values. Here’s an example of how you can do that:
@@ -108,6 +142,25 @@ test_data = [
 def test_addition_dynamic_id(input, expected):
     assert input + input == expected
 ```
+
+
+## Assign Custom Idenfiers for Parameterized `pytest` Fixutres
+
+For parametrized fixtures, you could use the `ids` parameter of the fixture decorator and access the current parameter value by inspecting `request.param`:
+
+```python
+@pytest.fixture(params=["done", "in prog", "todo"], ids=["State: Done", "State: In Progress", "State: To Do"])
+def start_state(request):
+    return request.param
+
+def test_finish(cards_db, start_state):
+    c = Card('write a book', state=start_sate)
+    index = cards_db.add_card(c)
+    cards_db.finish(index)
+    card = cards_db.get_card(index)
+    assert card.state == "done"
+```
+
 
 ## Conclusion
 

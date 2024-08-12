@@ -32,3 +32,15 @@ def test_addition_automatic_param_ids(input, expected):
 )
 def test_addition_custom_id(input, expected):
     assert input + input == expected
+
+
+@pytest.mark.parametrize(
+    "input, expected", 
+    test_data,
+    ids = ("one_plus_one", "two_plus_two", "three_plus_three")
+)
+def test_addition_custom_ids_list(input, expected):
+    assert input + input == expected
+
+
+
