@@ -32,6 +32,7 @@ You can now use Markdown syntax in your `.rst` files. Simply start your `.rst` f
 
 ```rst
 .. include:: <(path-to-your-markdown-file).md>
+    :parser: markdown
 ```
 
 You can also use Markdown in place of reStructuredText in your `.rst` files using the `.. markdown::` directive. This can be useful if you want to include Markdown content within a reStructuredText file.

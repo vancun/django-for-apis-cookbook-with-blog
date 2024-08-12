@@ -11,6 +11,7 @@ Django for APIs Cookbook
    /book/test-models-with-pytest
    /book/rest-api-with-django-rest-framework-drf
    /book/finite-state-machikne-state-transitions-with-django-fsm
+   /book/pytest
    /book/future-topics
 
 
