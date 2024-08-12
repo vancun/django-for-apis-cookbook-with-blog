@@ -3,7 +3,13 @@
 
 In `pytest`, you can add a name or a message to a parameter set to make it easier to identify which parameter set is being run. This can be particularly useful when you have many parameter sets or complex test cases.
 
-To achieve this, you can use the `pytest.param` function, which allows you to add a custom identifier to each parameter set. We will see how this can be done, but first let's first see how `pytest` is creating automatic identifiers:
+Custom identifiers for `pytest` parametrization could be specified in different ways:
+
+- Using a callback function passed as `ids` argument to `pytest.mark.parametrize`.
+- Using a list of ids, passed as `ids` argument to `pytest.mark.parametrize`.
+- Using `pytest.param`
+
+First let's see how `pytest` is creating automatic identifiers:
 
 ## Parameterization with automatic identifiers
 
@@ -121,6 +127,113 @@ src/tests/recipes/test_custom_parameterset_identifiers.py::test_addition_custom_
 ============================== 3 passed in 0.07s ===============================
 ```
 
+## Good Practice: Use Dictionary to Define Test Parameters
+
+Let's assume we need to test a function which can be used to withdraw money from a bank account.
+
+```python
+from decimal import Decimal
+
+
+class BadWithdrawRequest(Exception):
+    pass
+
+
+class NegativeOrZeroAmount(BadWithdrawRequest):
+    def __init__(self, message="Cannot withdraw negative or zero amount."):
+        super().__init__(message)
+
+
+class NegativeOrZeroBalance(BadWithdrawRequest):
+    def __init__(self, message="Cannot withdraw from negative or zero balance."):
+        super().__init__(message)
+
+
+class InsufficientBalance(BadWithdrawRequest):
+    def __init__(self, message="Insufficient balance to complete withdrawal."):
+        super().__init__(message)
+
+
+def withdraw(balance, amount):
+    if not isinstance(balance, Decimal) or not isinstance(amount, Decimal):
+        raise TypeError("Both balance and amount must be Decimal instances.")
+    if amount <= 0:
+        raise NegativeOrZeroAmount()
+    if balance <= 0:
+        raise NegativeOrZeroBalance()
+    if balance < amount:
+        raise InsufficientBalance()
+    return balance - amount
+```
+
+We can create two test functions - one for testing success and one for testing failure. The two functions are parametrized.
+
+We could use dictionary to define the function parameters. The keys of the dictionary are the ids of the parameter set, expressing the behavior being tested and the value is
+the actual parameterset.
+
+```python
+import pytest
+
+params_for_test_withdraw_success = {
+    "enough-balance": (Decimal(10), Decimal(5), Decimal(5)),
+    "full-balance": (Decimal(5), Decimal(5), Decimal(0)),
+    "rounding-error": (Decimal("0.3"), Decimal("0.1"), Decimal("0.20")),
+}
+
+params_for_test_withdraw_failure = {
+    "non-decimal-balance": (5, Decimal(-5), TypeError, "(?i)both balance and amount must be decimal instances"),
+    "non-decimal-amount": (5, Decimal(-5), TypeError, "(?i)both balance and amount must be decimal instances"),
+    "negative-amount": (Decimal(5), Decimal(-5), NegativeOrZeroAmount, "negative or zero amount"),
+    "insufficient-balance": (Decimal(5), Decimal(10), InsufficientBalance, "(?i)insufficient balance"),
+    "zero-balance": (Decimal(0), Decimal(5), NegativeOrZeroBalance, "negative or zero balance"),
+    "negative-balance": (Decimal(-5), Decimal(5), NegativeOrZeroBalance, "negative or zero balance"),
+}
+
+
+@pytest.mark.parametrize(
+    "balance, amount, expect",
+    params_for_test_withdraw_success.values(),
+    ids=params_for_test_withdraw_success.keys(),
+)
+def test_withdraw_success(balance, amount, expect):
+    new_balance = withdraw(balance, amount)
+    assert new_balance == expect
+
+
+@pytest.mark.parametrize(
+    "balance, amount, expect_raises, raise_matches",
+    params_for_test_withdraw_failure.values(),
+    ids=params_for_test_withdraw_failure.keys(),
+)
+def test_withdraw_failure(balance, amount, expect_raises, raise_matches):
+    with pytest.raises(expect_raises, match=raise_matches):
+        withdraw(balance, amount)
+
+```
+Running the tests produces following output:
+
+```
+============================= test session starts ==============================
+platform linux -- Python 3.10.13, pytest-8.3.2, pluggy-1.5.0 -- /home/codespace/.python/current/bin/python3
+cachedir: .pytest_cache
+django: version: 5.1, settings: blogapi.settings (from ini)
+rootdir: /workspaces/django-for-apis-cookbook-with-blog
+configfile: pytest.ini
+plugins: anyio-4.4.0, cov-5.0.0, django-4.8.0
+collecting ... collected 9 items
+
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_success[enough-balance] PASSED [ 11%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_success[full-balance] PASSED [ 22%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_success[rounding-error] PASSED [ 33%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_failure[non-decimal-balance] PASSED [ 44%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_failure[non-decimal-amount] PASSED [ 55%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_failure[negative-amount] PASSED [ 66%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_failure[insufficient-balance] PASSED [ 77%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_failure[zero-balance] PASSED [ 88%]
+src/tests/sandbox/test_parametrize_with_dictionary.py::test_withdraw_failure[negative-balance] PASSED [100%]
+
+============================== 9 passed in 0.10s ===============================
+```
 
 ## Generate Dynamic Identifiers
 
@@ -136,13 +249,31 @@ test_data = [
 ]
 
 @pytest.mark.parametrize(
-    "input, expected", 
-    [pytest.param(input, expected, id=f"{input}_plus_{input}") for input, expected in test_data]
+    "input, expected",
+    test_data,
+    ids = (f"{input}_plus_{input}_expected_{expected}" for input, expected in test_data)
 )
-def test_addition_dynamic_id(input, expected):
+def test_addition_dynamic_id1(input, expected):
     assert input + input == expected
 ```
+And the output:
 
+```
+============================= test session starts ==============================
+platform linux -- Python 3.10.13, pytest-8.3.2, pluggy-1.5.0 -- /home/codespace/.python/current/bin/python3
+cachedir: .pytest_cache
+django: version: 5.1, settings: blogapi.settings (from ini)
+rootdir: /workspaces/django-for-apis-cookbook-with-blog
+configfile: pytest.ini
+plugins: anyio-4.4.0, cov-5.0.0, django-4.8.0
+collecting ... collected 3 items
+
+src/tests/sandbox/test_custom_parameterset_identifiers.py::test_addition_dynamic_id1[1_plus_1_expected_2] PASSED [ 33%]
+src/tests/sandbox/test_custom_parameterset_identifiers.py::test_addition_dynamic_id1[2_plus_2_expected_4] PASSED [ 66%]
+src/tests/sandbox/test_custom_parameterset_identifiers.py::test_addition_dynamic_id1[3_plus_3_expected_6] PASSED [100%]
+
+============================== 3 passed in 0.06s ===============================
+```
 
 ## Assign Custom Idenfiers for Parameterized `pytest` Fixutres
 
